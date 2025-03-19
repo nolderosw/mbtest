@@ -1,15 +1,23 @@
 <template>
     <label>{{ label }}</label>
-    <input v-model="localModel" :type="type" class="custom-input" />
+    <input v-model="localModel" :type="type" :placeholder="placeholder" class="custom-input" />
 </template>
 
 
 <script setup>
-defineProps({
+const props = defineProps({
     label: String,
     type: String,
+    error: Boolean,
+    placeholder: String,
 })
 const localModel = defineModel();
+
+const getErrorByType = () => {
+    if(props.type === 'email') {
+        return 'Formato inválido'
+    }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -24,5 +32,9 @@ const localModel = defineModel();
 
 .custom-input:focus {
     border-color: variables.$primary-color;
+}
+.error {
+    color: red;
+    font-size: 12px;
 }
 </style>
