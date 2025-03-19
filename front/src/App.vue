@@ -101,7 +101,7 @@ const clearAll = () => {
 const submitForm = async () => {
   if (currentStep.value === 4 && currentStepIsValid()) {
     try {
-      const response = await fetch('http://localhost:3000', {
+      const response = await fetch('http://localhost:3000/registration', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

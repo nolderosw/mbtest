@@ -7,7 +7,11 @@ app.use(express.json());
 const distPath = path.join(__dirname, "../front/dist");
 app.use(express.static(distPath));
 
-app.post("*", (req, res) => {
+app.get("/registration", (req, res) => {
+    res.sendFile(path.join(distPath, "index.html"));
+  });
+
+app.post("/registration", (req, res) => {
   try {
     const formData = req.body;
     if (formData) {
@@ -20,10 +24,6 @@ app.post("*", (req, res) => {
   } catch (err) {
     res.status(500).json({ message: "erro interno no servidor" });
   }
-});
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
 const PORT = process.env.PORT || 3000;
