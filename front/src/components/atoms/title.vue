@@ -17,8 +17,8 @@ const props = defineProps({
 const titles = [
   'Seja bem-vindo(a)',
   '',
-  'Criação de Senha',
-  'Revisão dos Dados'
+  'Senha de acesso',
+  'Revise suas informações'
 ];
 
 const getTitleByCurrentStep = () => {

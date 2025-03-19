@@ -42,28 +42,30 @@ const formData = ref({
 });
 
 const currentStepIsValid = () => {
-  if (currentStep.value === 1) {
-    return validateEmail(formData.value.email)
+  const { personType, email, name, socialReason, cpf, cnpj, birthDate, openDate, phone, password } = formData.value;
+  switch (currentStep.value) {
+    case 1:
+      return validateEmail(email);
+
+    case 2:
+      return personType === 'physical'
+        ? validateName(name) && validateCpf(cpf) && validateDate(birthDate) && validatePhone(phone)
+        : validateName(socialReason) && validateCnpj(cnpj) && validateDate(openDate) && validatePhone(phone);
+
+    case 3:
+      return validatePassword(password);
+
+    case 4:
+      const isValidPerson = personType === 'physical'
+        ? validateName(name) && validateCpf(cpf) && validateDate(birthDate)
+        : validateName(socialReason) && validateCnpj(cnpj) && validateDate(openDate);
+
+      return validateEmail(email) && isValidPerson && validatePhone(phone) && validatePassword(password);
+
+    default:
+      return false;
   }
-  if (currentStep.value === 2) {
-    if (formData.value.personType === 'physical') {
-      return validateName(formData.value.name) && validateCpf(formData.value.cpf) && validateDate(formData.value.birthDate) && validatePhone(formData.value.phone)
-    } else {
-      return validateName(formData.value.socialReason) && validateCnpj(formData.value.cnpj) && validateDate(formData.value.openDate) && validatePhone(formData.value.phone)
-    }
-  }
-  if (currentStep.value === 3) {
-    return validatePassword(formData.value.password)
-  }
-  if (currentStep.value === 4) {
-    if (formData.value.personType === 'physical') {
-      return validateEmail(formData.value.email) && validateName(formData.value.name) && validateCpf(formData.value.cpf) && validateDate(formData.value.birthDate) && validatePhone(formData.value.phone) && validatePassword(formData.value.password)
-    } else {
-      return validateEmail(formData.value.email) && validateName(formData.value.socialReason) && validateCnpj(formData.value.cnpj) && validateDate(formData.value.openDate) && validatePhone(formData.value.phone) && validatePassword(formData.value.password)
-    }
-  }
-  return false
-}
+};
 
 const nextStep = () => {
   if (currentStep.value < 4 && currentStepIsValid()) {
@@ -80,10 +82,44 @@ const prevStep = () => {
   }
 };
 
-const submitForm = () => {
-  if(currentStep.value === 4 && currentStepIsValid()) {
-    console.log(formData)
-    //post
+const clearAll = () => {
+  formData.value = {
+    email: '',
+    personType: 'physical',
+    name: '',
+    socialReason: '',
+    cpf: '',
+    cnpj: '',
+    birthDate: '',
+    openDate: '',
+    phone: '',
+    password: '',
+  }
+  currentStep.value = 1;
+}
+
+const submitForm = async () => {
+  if (currentStep.value === 4 && currentStepIsValid()) {
+    try {
+      const response = await fetch('http://localhost:3000', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData.value)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erro ao enviar formulário: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log('Formulário enviado com sucesso:', data);
+      clearAll();
+      alert('Formulário enviado com sucesso')
+    } catch (error) {
+      console.error('Erro ao enviar formulário:', error);
+    }
   } else {
     showError.value = true;
   }
