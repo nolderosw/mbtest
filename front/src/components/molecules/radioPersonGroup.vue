@@ -6,7 +6,6 @@
 </template>
 
 <script setup>
-import { defineModel } from 'vue';
 import Radio from '../atoms/radio.vue';
 
 const selectedOption = defineModel();

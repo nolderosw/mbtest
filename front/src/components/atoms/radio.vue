@@ -1,5 +1,5 @@
 <template>
-    <input v-model="proxyModel" type="radio" :name="name" :value="value" />
+    <input v-model="localModel" type="radio" :name="name" :value="value" />
     <label class="input-label" for="radio">{{ radioLabel }}</label>
 </template>
 
@@ -10,7 +10,7 @@ defineProps({
     value: String,
 });
 
-const proxyModel = defineModel();
+const localModel = defineModel();
 
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-    <button :disabled="disabled" type="button" :class="['btn', typeClass]">{{ label }}</button>
+    <button @click="emit('click')" :disabled="disabled" type="button" :class="['btn', typeClass]">{{ label }}</button>
 </template>
 
 <script setup>
@@ -9,6 +9,8 @@ defineProps({
     typeClass: String,
     disabled: Boolean,
 })
+
+const emit = defineEmits(['click'])
 
 </script>
 

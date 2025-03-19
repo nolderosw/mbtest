@@ -1,6 +1,6 @@
 <template>
     <label>{{ label }}</label>
-    <input :type="type" class="custom-input" />
+    <input v-model="localModel" :type="type" class="custom-input" />
 </template>
 
 
@@ -9,6 +9,7 @@ defineProps({
     label: String,
     type: String,
 })
+const localModel = defineModel();
 </script>
 
 <style lang="scss" scoped>

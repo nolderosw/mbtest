@@ -3,16 +3,33 @@
         Etapa <span class="current-step">{{ currentStep }}</span> de 4
     </div>
     <div class="form-title">
-        {{ title }}
+        {{ getTitleByCurrentStep() }}
     </div>
 </template>
 
 
 <script setup>
-defineProps({
+const props = defineProps({
     currentStep: Number,
-    title: String,
+    personType: String,
 })
+
+const titles = [
+  'Seja bem-vindo(a)',
+  '',
+  'Criação de Senha',
+  'Revisão dos Dados'
+];
+
+const getTitleByCurrentStep = () => {
+    if(props.currentStep === 2) {
+        if(props.personType === 'physical') {
+            return 'Pessoa Física'
+        } return 'Pessoa Jurídica'
+    } else {
+        return titles[props.currentStep - 1];
+    }
+}
 </script>
 
 <style lang="scss" scoped>
